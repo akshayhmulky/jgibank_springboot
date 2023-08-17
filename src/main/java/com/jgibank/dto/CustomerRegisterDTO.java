@@ -10,19 +10,21 @@ public class CustomerRegisterDTO {
     private Long customerId;
     private String fullName;
     private String email;
+    private String password;
     private String address;
     private String phoneNumber;
     private Gender gender;
     private Role role;
-    private Set<Account> accounts;
-
+    
+    //Constructor
     public CustomerRegisterDTO() {
     }
 
-    public CustomerRegisterDTO(Long customerId, String fullName, String email, String address, String phoneNumber, Gender gender, Role role, Set<AccountDTO> accounts) {
+    public CustomerRegisterDTO(Long customerId, String fullName, String email, String password, String address, String phoneNumber, Gender gender, Role role, Set<AccountDTO> accounts) {
         this.customerId = customerId;
         this.fullName = fullName;
         this.email = email;
+        this.password = password;
         this.address = address;
         this.phoneNumber = phoneNumber;
         this.gender = gender;
@@ -45,6 +47,14 @@ public class CustomerRegisterDTO {
 
     public void setFullName(String fullName) {
         this.fullName = fullName;
+    }
+    
+    public String getPassword() {
+    	return password;
+    }
+    
+    public void setPassword(String password) {
+    	this.password = password;
     }
 
     public String getEmail() {

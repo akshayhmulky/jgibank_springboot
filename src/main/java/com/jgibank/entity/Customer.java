@@ -4,13 +4,17 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.jgibank.entity.enums.Gender;
 import com.jgibank.entity.enums.Role;
+import com.jgibank.utility.GenerateUsernameFromEmail;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -22,8 +26,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name="customer")
@@ -36,39 +43,41 @@ public class Customer implements UserDetails{
 	@Column(name="customer_id", nullable=false)
 	private Long customerId;
 	
+	@Column(name="full_name", nullable=false)
 	@NotBlank(message = "FullName cannot be blank")
 	@NotNull(message="FullName cannot be null")
-	@Column(name="full_name", nullable=false)
 	private String fullName;
 
+	@Column(name="username", unique=true, nullable=false)
+	private String username;  //Username will be auto-generated based on email address
+	
+	@Column(name="email", nullable=false, unique=true)
 	@NotBlank(message = "Email cannot be blank")
 	@NotNull(message="Email cannot be null")
-	@Column(name="email", nullable=false, unique=true)
-	private String email;  //We will use email as username
+	@Email(message="Please enter valid email")
+	private String email; 
 	
+	@Column(name="password", nullable=false)
 	@NotBlank(message = "Password cannot be blank")
 	@NotNull(message="Password cannot be null")
-	@Column(name="password", nullable=false)
 	private String password;
 	
+	@Column(name="address", nullable=false)
 	@NotBlank(message = "Address cannot be blank")
 	@NotNull(message="Address cannot be null")
-	@Column(name="address", nullable=false)
 	private String address;
 	
+	@Column(name="phone_number", nullable=false)
 	@NotBlank(message = "Phone Number cannot be blank")
 	@NotNull(message="Phone Number cannot be null")
-	@Column(name="phone_number", nullable=false)
+	@Size(min = 10, max = 10, message = "Phone number must be 10 digits")
 	private String phoneNumber;
 	
-	@NotBlank(message = "Gender cannot be blank")
-	@NotNull(message="Gender cannot be null")
 	@Column(name="gender", nullable=false)
+	@NotNull(message="Gender cannot be null")
 	@Enumerated(EnumType.STRING)
 	private Gender gender;
    
-	@NotBlank(message = "Role cannot be blank")
-	@NotNull(message="Role cannot be null")
 	@Column(name="role", nullable=false)
 	@Enumerated(EnumType.STRING)
 	private Role role;
@@ -76,14 +85,12 @@ public class Customer implements UserDetails{
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Account> accounts = new HashSet<>();
     
-    
-    
-    public Customer() {
-    }
+    public Customer() { }
 
-    public Customer(String fullName, String email, String password, String address, String phoneNumber, Gender gender, Role role){
+    public Customer(String fullName, String email, String username, String password, String address, String phoneNumber, Gender gender, Role role){
         this.fullName = fullName;
         this.email = email;
+        this.username=username;
         this.password = password;
         this.address = address;
         this.phoneNumber = phoneNumber;
@@ -145,25 +152,35 @@ public class Customer implements UserDetails{
 
 
 	@Override
+	@JsonIgnore
 	public String getPassword() {
 		// TODO Auto-generated method stub
 		return password;
 	}
 	
+	@JsonProperty
 	public void setPassword(String password) {
 		this.password = password;
 	}
 
 	@Override
 	public String getUsername() {
-		return email;
+		return username;
 	}	
 
-	public void setUsername(String email) {
-		this.email=email;
+	public void setUsername(String username) {
+		this.username=username;
 	}
 	
-	
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
 	public Role getRole() {
 		return role;
 	}

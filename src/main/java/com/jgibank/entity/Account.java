@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.jgibank.entity.enums.AccountType;
 import com.jgibank.entity.enums.BankBranch;
 import com.jgibank.entity.enums.IFSCCode;
@@ -31,56 +32,65 @@ public class Account {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="account_id", nullable=false)
-	private Long accountId;
+	private Long accountId;                    //Auto Generation
 	
-	@NotBlank(message = "Account Number cannot be blank")
-	@NotNull(message="Account Number cannot be null")
 	@Column(name="account_number", unique=true, nullable=false)
-	private String accountNumber;
+	private String accountNumber;               //Auto Generation
 	
-	@NotBlank(message = "Bank Branch cannot be blank")
-	@NotNull(message="Bank Branch cannot be null")
 	@Column(name="bank_branch", nullable=false)
+	@NotNull(message="Bank Branch cannot be null")
 	@Enumerated(EnumType.STRING)
 	private BankBranch bankBranch;
 	
-	@NotBlank(message = "IFSC Code cannot be blank")
-	@NotNull(message="IFSC Code cannot be null")
 	@Column(name="ifsc_code", nullable=false)
+	@NotNull(message="IFSC Code cannot be null")
 	@Enumerated(EnumType.STRING)
 	private IFSCCode ifscCode;
 	
-	@NotNull(message="Total Balance cannot be null")
-	@Column(name="total_balance", nullable=false)
-	private BigDecimal totalBalance;
+	@Column(name="minimum_balance", nullable=false)
+	@NotNull(message="Minimum balance cannot be null")
+	private BigDecimal minimumBalance;             //Default value is set in AccountService
 	
-	@NotBlank(message = "Account Type cannot be blank")
-	@NotNull(message="Account Type cannot be null")
+	@Column(name="total_balance", nullable=false)
+	private BigDecimal totalBalance;               //Default value is set in AccountService
+	
 	@Column(name="account_type", nullable=false)
+	@NotNull(message="Account Type cannot be null")
 	@Enumerated(EnumType.STRING)
 	private AccountType accountType;
 	
+	
+    @Column(name = "customer_id", nullable = false)
+    @NotNull(message="Customer Id cannot be null")
+    private Long customerId;
+	
 	//One Customer Many Accounts Relationship
+	//It is only for foreign
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "customer_id")
+    @JoinColumn(name = "customer_id", referencedColumnName = "customer_id", insertable = false, updatable = false)
     private Customer customer;
     
+    
     //One Account many Beneficiary Relationship
+    //Useful in fetching beneficiaries associated with this account 
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Beneficiary> beneficiaries = new HashSet<>();
     
     //One Account many Transaction Relationship
+    //Useful in fetching Transactions associated with this account
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Transaction> transactions = new HashSet<>();
 
 	public Account() {}
 
-	public Account(Long accountId, String accountNumber, BankBranch bankBranch, IFSCCode ifscCode, BigDecimal totalBalance, AccountType accountType, Customer customer) {
+	public Account(Long accountId, String accountNumber, BankBranch bankBranch, IFSCCode ifscCode, BigDecimal minimumBalance, BigDecimal totalBalance, AccountType accountType, Customer customer) {
 		super();
 		this.accountId = accountId;
 		this.accountNumber = accountNumber;
 		this.bankBranch = bankBranch;
 		this.ifscCode = ifscCode;
+		this.minimumBalance=minimumBalance;
 		this.totalBalance = totalBalance;
 		this.accountType = accountType;
 		this.customer = customer;
@@ -100,6 +110,16 @@ public class Account {
 
 	public void setAccountNumber(String accountNumber) {
 		this.accountNumber = accountNumber;
+	}
+	
+	
+
+	public BigDecimal getMinimumBalance() {
+		return minimumBalance;
+	}
+
+	public void setMinimumBalance(BigDecimal minimumBalance) {
+		this.minimumBalance = minimumBalance;
 	}
 
 	public BankBranch getBankBranch() {
@@ -138,8 +158,14 @@ public class Account {
 		return customer;
 	}
 
-	public void setCustomer(Customer customer) {
-		this.customer = customer;
+	public Long getCustomerId() {
+		return customerId;
 	}
+
+	public void setCustomerId(Long customerId) {
+		this.customerId = customerId;
+	}
+
+	
     
 }
