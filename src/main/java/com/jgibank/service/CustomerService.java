@@ -100,8 +100,8 @@ public class CustomerService implements UserDetailsService {
 //	}
 //	
 	
-	public CustomerResponseDTO getCustomerByUsernameExcludingSensitiveDetails(Long username) {
-	return convertEntityToDTO(customerRepository.findById(username).orElse(null));
+	public CustomerResponseDTO getCustomerByUsernameExcludingSensitiveDetails(String username) {
+	return convertEntityToDTO(customerRepository.findByUsername(username).orElse(null));
 }
 	
 

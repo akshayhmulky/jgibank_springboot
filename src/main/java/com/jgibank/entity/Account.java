@@ -170,5 +170,9 @@ public class Account {
 		return transactions;
 	}
 	
+	public Set<Beneficiary> getBeneficiaries() {
+		return beneficiaries;
+	}
+	
     
 }

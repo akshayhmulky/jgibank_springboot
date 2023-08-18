@@ -29,6 +29,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("api/v1")
+@CrossOrigin(origins = "http://localhost:3000") 
 public class CustomerController {
 	
 	@Autowired
@@ -60,7 +61,6 @@ public class CustomerController {
 	
     //Customer would only be able to see their Accounts, however ADMIN can see everyone's accounts
 	@GetMapping("accounts/{username}")
-	@PreAuthorize("hasRole('ADMIN') or (hasRole('USER') and #username == authentication.name)")
 	public ResponseEntity<?> getAccountsByUsername(@PathVariable String username){
 		try {
 		return ResponseEntity.status(HttpStatus.OK).body(customerService.getAccountsByUsername(username));
@@ -72,7 +72,6 @@ public class CustomerController {
 	
 	//Update Customer (NOTE: include username in body..)
 	@PutMapping("customer/update")
-	@PreAuthorize("hasRole('ADMIN') or (hasRole('USER') and #username == authentication.name)")
 	public ResponseEntity<?> updateCustomerByUsername(@RequestBody CustomerProfileUpdateRequestDTO customer){
 		try {
 		 return ResponseEntity.status(HttpStatus.OK).body(customerService.updateCustomerByUsername(customer));
@@ -84,7 +83,7 @@ public class CustomerController {
 	
 	
 	@GetMapping("customer/{username}")
-	public ResponseEntity<?> getCustomerByUsername(@PathVariable("username") Long username){
+	public ResponseEntity<?> getCustomerByUsername(@PathVariable("username") String username){
 		try {
 		return ResponseEntity.status(HttpStatus.OK).body(customerService.getCustomerByUsernameExcludingSensitiveDetails(username));
 		}catch(Exception e) {

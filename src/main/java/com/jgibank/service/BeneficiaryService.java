@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.jgibank.repository.AccountRepository;
 import com.jgibank.repository.BeneficiaryRepository;
+import com.jgibank.dto.AddBeneficiaryRequestDTO;
 import com.jgibank.entity.Account;
 import com.jgibank.entity.Beneficiary;
 
@@ -19,8 +20,8 @@ public class BeneficiaryService {
 	@Autowired
 	private AccountRepository accountRepostiory;
 	
-	public Beneficiary addBeneficiary(Beneficiary beneficiary) {
-        Account account = accountRepostiory.findById(beneficiary.getAccountId()).orElse(null);
+	public Beneficiary addBeneficiary(AddBeneficiaryRequestDTO beneficiary) {
+        Account account = accountRepostiory.findByAccountNumber(beneficiary.getAccountNumber()).orElse(null);
         Account beneficiaryAccount = accountRepostiory.findByAccountNumber(beneficiary.getBeneficiaryAccountNumber()).orElse(null);
         //If beneficiary account is invalid then throw an exception
         if(beneficiaryAccount==null) {
@@ -31,11 +32,24 @@ public class BeneficiaryService {
         	throw new IllegalArgumentException("Beneficiary Account Number and Self Account cannot be same");
         }
         
-        //Setting default bank name, since we are allowing only internal fund transfer for now
-		beneficiary.setBeneficiaryBankName("JGIBank");
+        Beneficiary ben = convertToBeneificiaryEntity(beneficiary, account.getAccountId());
 		
-	    return beneficiaryRepository.save(beneficiary);
+	    return beneficiaryRepository.save(ben);
 
+		
+
+	}
+	
+	private Beneficiary convertToBeneificiaryEntity(AddBeneficiaryRequestDTO beneficiary, Long accountId) {
+		Beneficiary ben = new Beneficiary();
+		ben.setBeneficiaryName(beneficiary.getBeneficiaryName());
+		ben.setBeneficiaryAccountNumber(beneficiary.getBeneficiaryAccountNumber());
+		
+        //Setting default bank name, since we are allowing only internal fund transfer for now
+		ben.setBeneficiaryBankName("JGIBank");
+		ben.setAccountId(accountId);
+		ben.setMaximumTransferLimit(beneficiary.getMaximumTransferLimit());
+		return ben;
 	}
 	
 	

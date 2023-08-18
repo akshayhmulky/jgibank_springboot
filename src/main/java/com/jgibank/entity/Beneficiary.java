@@ -120,6 +120,7 @@ public class Beneficiary {
 		this.accountId = accountId;
 	}
 
+	
     
 
 }

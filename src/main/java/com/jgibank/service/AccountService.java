@@ -26,7 +26,7 @@ public class AccountService {
   public Account addAccount(Account account) {
 		 String accountNumber = GenerateBankAccountNumber.generateBankAccountNumber();
 		 account.setAccountNumber(accountNumber);
-		 account.setTotalBalance(new BigDecimal(0));
+		 account.setTotalBalance(new BigDecimal(1000)); //By default lets add 1000 as Joining Bonus
 		 return accountRepository.save(account);
   }
   
