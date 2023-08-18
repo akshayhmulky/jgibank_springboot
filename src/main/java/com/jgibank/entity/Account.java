@@ -64,7 +64,7 @@ public class Account {
     @NotNull(message="Customer Id cannot be null")
     private Long customerId;
 	
-	//One Customer Many Accounts Relationship
+	//Many Accounts One Customer Relationship
 	//It is only for foreign
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
@@ -84,7 +84,7 @@ public class Account {
 
 	public Account() {}
 
-	public Account(Long accountId, String accountNumber, BankBranch bankBranch, IFSCCode ifscCode, BigDecimal minimumBalance, BigDecimal totalBalance, AccountType accountType, Customer customer) {
+	public Account(Long accountId, String accountNumber, BankBranch bankBranch, IFSCCode ifscCode, BigDecimal minimumBalance, BigDecimal totalBalance, AccountType accountType, Long customerId) {
 		super();
 		this.accountId = accountId;
 		this.accountNumber = accountNumber;
@@ -93,8 +93,8 @@ public class Account {
 		this.minimumBalance=minimumBalance;
 		this.totalBalance = totalBalance;
 		this.accountType = accountType;
-		this.customer = customer;
-	}
+		this.customerId = customerId;	
+		}
 
 	public Long getAccountId() {
 		return accountId;
@@ -166,6 +166,9 @@ public class Account {
 		this.customerId = customerId;
 	}
 
+	public Set<Transaction> getTransactions() {
+		return transactions;
+	}
 	
     
 }

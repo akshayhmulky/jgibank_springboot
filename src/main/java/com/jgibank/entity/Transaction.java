@@ -5,6 +5,8 @@ import java.sql.Timestamp;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -48,12 +50,18 @@ public class Transaction {
     @Column(name="deposit")
 	private BigDecimal deposit;
     
+    
     @NotNull(message = "Balance amount must not be null")
     @Column(name="balance")
 	private BigDecimal balance;
     
+    @Column(name = "account_id", nullable = false)
+    @NotNull(message="AccountId cannot be null")
+    private Long accountId;
+    
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "account_id")
+    @JoinColumn(name = "account_id" , referencedColumnName = "account_id", insertable = false, updatable = false)
     private Account account;
 
     //Constructors
@@ -67,14 +75,14 @@ public class Transaction {
             BigDecimal withdraw,
             BigDecimal deposit,
             BigDecimal balance,
-            Account account
+            Long accountId
     ) {
         this.transferFrom = transferFrom;
         this.transferTo = transferTo;
         this.withdraw = withdraw;
         this.deposit = deposit;
         this.balance = balance;
-        this.account = account;
+        this.accountId = accountId;
     }
     
     
@@ -119,7 +127,8 @@ public class Transaction {
         this.deposit = deposit;
     }
 
-    public BigDecimal getBalance() {
+    
+	public BigDecimal getBalance() {
         return balance;
     }
 
@@ -127,13 +136,18 @@ public class Transaction {
         this.balance = balance;
     }
 
-    public Account getAccount() {
-        return account;
-    }
+	public Long getAccountId() {
+		return accountId;
+	}
 
-    public void setAccount(Account account) {
-        this.account = account;
-    } 
-    
+	public void setAccountId(Long accountId) {
+		this.accountId = accountId;
+	}
+
+	public Long getTransactionId() {
+		return transactionId;
+	}
+
+ 
     
 }

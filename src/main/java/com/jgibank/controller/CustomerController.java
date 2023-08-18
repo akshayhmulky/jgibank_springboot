@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,7 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.jgibank.dto.CustomerProfileUpdateDTO;
+import com.jgibank.dto.CustomerProfileUpdateRequestDTO;
+import com.jgibank.dto.CustomerResponseDTO;
 import com.jgibank.dto.JwtTokenResponse;
 import com.jgibank.entity.Account;
 import com.jgibank.entity.Customer;
@@ -32,9 +34,9 @@ public class CustomerController {
 	@Autowired
 	private CustomerService customerService;
 
-	@GetMapping("test")
+	@GetMapping("bank")
 	public ResponseEntity<?> testApi(){
-		return ResponseEntity.status(HttpStatus.OK).body(GenerateBankAccountNumber.generateBankAccountNumber());
+		return ResponseEntity.status(HttpStatus.OK).body("Hi, Welcome to JGI Bank..");
 	}
 	
 	@PostMapping("register")
@@ -69,8 +71,9 @@ public class CustomerController {
     
 	
 	//Update Customer (NOTE: include username in body..)
-	@PutMapping("update/customer")
-	public ResponseEntity<?> updateCustomerByUsername(@RequestBody CustomerProfileUpdateDTO customer){
+	@PutMapping("customer/update")
+	@PreAuthorize("hasRole('ADMIN') or (hasRole('USER') and #username == authentication.name)")
+	public ResponseEntity<?> updateCustomerByUsername(@RequestBody CustomerProfileUpdateRequestDTO customer){
 		try {
 		 return ResponseEntity.status(HttpStatus.OK).body(customerService.updateCustomerByUsername(customer));
 
@@ -79,6 +82,17 @@ public class CustomerController {
 		}
 	}
 	
+	
+	@GetMapping("customer/{username}")
+	public ResponseEntity<?> getCustomerByUsername(@PathVariable("username") Long username){
+		try {
+		return ResponseEntity.status(HttpStatus.OK).body(customerService.getCustomerByUsernameExcludingSensitiveDetails(username));
+		}catch(Exception e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e);
+		}
+
+
+	}
 	
 	
 	//ONLY FOR ADMIN

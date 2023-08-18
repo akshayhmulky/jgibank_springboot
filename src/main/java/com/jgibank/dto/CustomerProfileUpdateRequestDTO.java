@@ -16,7 +16,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-public class CustomerProfileUpdateDTO {
+public class CustomerProfileUpdateRequestDTO {
 
 	private Long customerId;
 	
@@ -81,7 +81,7 @@ public class CustomerProfileUpdateDTO {
 		this.gender = gender;
 	}
 
-	public CustomerProfileUpdateDTO(String fullName, String username, String password, String address, String phoneNumber,
+	public CustomerProfileUpdateRequestDTO(String fullName, String username, String password, String address, String phoneNumber,
 			Gender gender) {
 		super();
 		this.fullName = fullName;
@@ -92,12 +92,12 @@ public class CustomerProfileUpdateDTO {
 		this.gender = gender;
 	}
 	
-	public CustomerProfileUpdateDTO() {
+	public CustomerProfileUpdateRequestDTO() {
 		super();
 		
 	}
 
-	public CustomerProfileUpdateDTO(Set<Account> accountsByUsername) {
+	public CustomerProfileUpdateRequestDTO(Set<Account> accountsByUsername) {
 		// TODO Auto-generated constructor stub
 	}
 	

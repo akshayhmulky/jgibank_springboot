@@ -16,7 +16,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.jgibank.dto.CustomerProfileUpdateDTO;
+import com.jgibank.dto.CustomerProfileUpdateRequestDTO;
 import com.jgibank.dto.CustomerResponseDTO;
 import com.jgibank.entity.Account;
 import com.jgibank.entity.Customer;
@@ -74,25 +74,39 @@ public class CustomerService implements UserDetailsService {
 		}
 	}
 
+	
 	// Get account by username
 	public Set<Account> getAccountsByUsername(String username) {
 		Customer customer = customerRepository.findByUsername(username).orElse(null);
 		Set<Account> accounts = customer.getAccounts();
 		return accounts;
 	}
-
+	
+	
 	// Get all accounts (FOR ADMIN)
 	public List<Customer> getAllCustomers() {
 		return customerRepository.findAll();
 	}
+	
 
 	// Get customer by username
 	public Customer getCustomerByUsername(String username) {
 		return customerRepository.findByUsername(username).orElse(null);
 	}
+	
+	//Get customer by username(exclusing sensitive details)
+//	public CustomerResponseDTO getCustomerByUsernameExcludingSensitiveDetails(String username) {
+//		return convertEntityToDTO(customerRepository.findByUsername(username).orElse(null));
+//	}
+//	
+	
+	public CustomerResponseDTO getCustomerByUsernameExcludingSensitiveDetails(Long username) {
+	return convertEntityToDTO(customerRepository.findById(username).orElse(null));
+}
+	
 
 	// Update Customer profile by username
-	public CustomerResponseDTO updateCustomerByUsername(CustomerProfileUpdateDTO customer) {
+	public CustomerResponseDTO updateCustomerByUsername(CustomerProfileUpdateRequestDTO customer) {
 		Customer existingCustomer = getCustomerByUsername(customer.getUsername());
 		if (customer.getUsername() == null || existingCustomer == null) {
 			throw new IllegalArgumentException("Either username is blank or not valid!");
@@ -119,7 +133,7 @@ public class CustomerService implements UserDetailsService {
 
 	
 	
-	// Convert Customer to CustomerResponseDTO so that we can only show the fields which are necessary
+	// Convert Customer to CustomerResponseDTO so that we can only show the fields which are necessary, and hide confidential fields
 	public CustomerResponseDTO convertEntityToDTO(Customer customer) {
 		CustomerResponseDTO customerResponseDTO = new CustomerResponseDTO();
 		customerResponseDTO.setCustomerId(customer.getCustomerId());
