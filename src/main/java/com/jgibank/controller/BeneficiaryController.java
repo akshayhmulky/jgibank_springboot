@@ -17,7 +17,7 @@ import com.jgibank.service.BeneficiaryService;
 @RestController
 @RequestMapping("api/v1")
 //@CrossOrigin(origins = "http://localhost:3000") 
-@CrossOrigin(origins = "https://jgibank-react-i4yvxndzx-akshayhmulky.vercel.app")
+@CrossOrigin(origins = "https://jgibank-react.vercel.app")
 public class BeneficiaryController {
 
   @Autowired
@@ -34,6 +34,7 @@ public class BeneficiaryController {
 		    "maximumTransferLimit":"200000",
 		    "accountId":1
 		}
+	   Token Authentication: Bearer <JWTToken>
 	 */
   @PostMapping("beneficiary/add")
   public ResponseEntity<?> addBeneficiary(@RequestBody AddBeneficiaryRequestDTO beneficiary){

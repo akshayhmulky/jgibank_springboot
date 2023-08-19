@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -117,6 +118,7 @@ public class Customer implements UserDetails{
 	public Set<Account> getAccounts() {
 		return accounts;
 	}
+	
 
 	public void setAccounts(Set<Account> accounts) {
 		this.accounts = accounts;
@@ -189,7 +191,7 @@ public class Customer implements UserDetails{
 		this.role = role;
 	}
 
-	//
+	//Authentication purpose by role
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return List.of(new SimpleGrantedAuthority(role.name()));

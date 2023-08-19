@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import com.jgibank.entity.Customer;
+import com.jgibank.entity.enums.Role;
 import com.jgibank.entity.Account;
 
 import java.util.List;
@@ -13,5 +14,6 @@ import java.util.List;
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer, Long>{
 	  Optional<Customer> findByUsername(String username);
+	  Optional<Customer> findByRole (Role role);
       
 }

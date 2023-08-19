@@ -23,7 +23,7 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("api/v1")
 //@CrossOrigin(origins = "http://localhost:3000")
-@CrossOrigin(origins = "https://jgibank-react-i4yvxndzx-akshayhmulky.vercel.app")
+@CrossOrigin(origins = "https://jgibank-react.vercel.app")
 public class AccountController {
 
 	@Autowired
@@ -32,13 +32,15 @@ public class AccountController {
 	/*
 	 * Route: POST http://localhost:8080/api/v1/account/add 
 	 * Description: Allow only ADMIN to open account for the customer 
-	 * body: 
+	 * Request body: 
 		  { "bankBranch":"CHEMBUR",
 		    "ifscCode":"JGIBANK003", 
 		    "minimumBalance":10000, 
 		    "accountType":"SAVINGS",
 		    "customerId": 1 }
+	   Token Authentication: Bearer <JWTToken>
 	 */
+	
 	@PostMapping("account/add")
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> addAccount(@RequestBody @Valid Account account) {
@@ -52,6 +54,7 @@ public class AccountController {
 	/*
 	 * Route: GET http://localhost:8080/api/v1/account/<accountNumber>
 	 * Description: Get Account by AccountNumber
+	 * Token Authentication: Bearer <JWTToken>
 	 */
 
 	@GetMapping("account/{accountNumber}")
@@ -69,7 +72,8 @@ public class AccountController {
 	
 	/*
 	 * Route: GET http://localhost:8080/api/v1/account/addAmount/<accountNumber>
-	 * Description: Add Amount to the account
+	 * Description: Add Amount to the account by Only Admin for now
+	 * Token Authentication: Bearer <JWTToken>
 	 */
 
 	@PostMapping("account/addbalance")

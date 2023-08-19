@@ -28,6 +28,7 @@ C:\Users\mulkya\Desktop\FULLSTACK\SPRING BOOT\JGI Project\jgibank\src\main\java\
 C:\Users\mulkya\Desktop\FULLSTACK\SPRING BOOT\JGI Project\jgibank\src\main\java\com\jgibank\entity\Transaction.java
 C:\Users\mulkya\Desktop\FULLSTACK\SPRING BOOT\JGI Project\jgibank\src\main\java\com\jgibank\entity\enums\Gender.java
 C:\Users\mulkya\Desktop\FULLSTACK\SPRING BOOT\JGI Project\jgibank\src\main\java\com\jgibank\dto\AddBeneficiaryRequestDTO.java
+C:\Users\mulkya\Desktop\FULLSTACK\SPRING BOOT\JGI Project\jgibank\src\main\java\com\jgibank\dto\RoleChangeDTORequest.java
 C:\Users\mulkya\Desktop\FULLSTACK\SPRING BOOT\JGI Project\jgibank\src\main\java\com\jgibank\entity\Beneficiary.java
 C:\Users\mulkya\Desktop\FULLSTACK\SPRING BOOT\JGI Project\jgibank\src\main\java\com\jgibank\dto\AddBalanceRequestDTO.java
 C:\Users\mulkya\Desktop\FULLSTACK\SPRING BOOT\JGI Project\jgibank\src\main\java\com\jgibank\utility\GenerateUsernameFromEmail.java

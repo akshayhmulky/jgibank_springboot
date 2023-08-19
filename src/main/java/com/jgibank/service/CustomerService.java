@@ -104,6 +104,15 @@ public class CustomerService implements UserDetailsService {
 	return convertEntityToDTO(customerRepository.findByUsername(username).orElse(null));
 }
 	
+	
+	public String changeRoleOfCustomerByUsername(String username, String role) {
+		Customer customer = getCustomerByUsername(username);
+		customer.setRole(role.equals("ROLE_USER")?Role.ROLE_USER:Role.ROLE_ADMIN);
+		customerRepository.save(customer);
+		return "Role Change successfully";
+	}
+	
+	
 
 	// Update Customer profile by username
 	public CustomerResponseDTO updateCustomerByUsername(CustomerProfileUpdateRequestDTO customer) {
