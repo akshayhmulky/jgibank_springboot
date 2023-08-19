@@ -24,8 +24,8 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("api/v1")
-//@CrossOrigin(origins = "http://localhost:3000") 
-@CrossOrigin(origins = "https://jgibank-react.vercel.app")
+@CrossOrigin(origins = "http://localhost:3000") 
+//@CrossOrigin(origins = "https://jgibank-react.vercel.app")
 public class CustomerController {
 	
 	@Autowired

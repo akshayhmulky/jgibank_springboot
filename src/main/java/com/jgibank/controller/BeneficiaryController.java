@@ -16,8 +16,8 @@ import com.jgibank.service.BeneficiaryService;
 
 @RestController
 @RequestMapping("api/v1")
-//@CrossOrigin(origins = "http://localhost:3000") 
-@CrossOrigin(origins = "https://jgibank-react.vercel.app")
+@CrossOrigin(origins = "http://localhost:3000") 
+//@CrossOrigin(origins = "https://jgibank-react.vercel.app")
 public class BeneficiaryController {
 
   @Autowired
